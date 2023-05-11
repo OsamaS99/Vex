@@ -1,6 +1,5 @@
 #pragma once
-#include <stdio.h>
 
-
-#include "Vex/application.h"
-#include "Vex/entryPoint.h"
+#include "Vex/Application.h"
+#include "Vex/Log.h"
+#include "Vex/EntryPoint.h"

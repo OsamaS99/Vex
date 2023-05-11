@@ -5,8 +5,14 @@
 extern Vex::Application* Vex::CreateApplication();
 
 int main(int argc, char** argv) {
-	printf("Vex Engine");
+
+	Vex::Log::Init();
+	VX_CORE_WARN("Vex Initialized");
+	VX_CLIENT_INFO("Hello Vex Engine!");
+
 	auto app = Vex::CreateApplication();
+
+
 	app->Run();
 	delete app;
 	return 0;
