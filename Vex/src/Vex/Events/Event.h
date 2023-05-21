@@ -10,7 +10,7 @@ namespace Vex {
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
-		KeyPressed, KeyReleased,
+		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
 
@@ -34,7 +34,6 @@ namespace Vex {
 
 	class VEX_API Event
 	{
-		friend class EventDispatcher;
 
 	public:
 		virtual EventType GetEventType() const = 0;
@@ -46,8 +45,7 @@ namespace Vex {
 			return GetCategoryFlags() & category;
 		}
 
-	protected:
-		bool m_Handeled = false;
+		bool Handeled = false;
 	};
 
 	class EventDispatcher
@@ -58,11 +56,16 @@ namespace Vex {
 		template<typename T>
 		bool Dispatch(EventFn<T> func) {
 			if (m_Event.GetEventType() == T::GetStaticType()) {
-				m_Event.m_Handled |= func(*(T*) & m_Event);
+				m_Event.Handeled |= func(*(T*) & m_Event);
 				return true;
 			}
 			return false;
 		}
+		EventDispatcher(Event& event)
+			: m_Event(event)
+		{
+		}
+
 	private:
 		Event& m_Event;
 

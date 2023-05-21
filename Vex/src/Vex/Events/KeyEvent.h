@@ -5,7 +5,7 @@
 
 
 namespace Vex {
-	class VEX_API KeyEvent : public Event {
+	class  KeyEvent : public Event {
 	public:
 		inline int GetKeyCode() const { return m_KeyCode;  }
 		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
@@ -14,8 +14,7 @@ namespace Vex {
 		int m_KeyCode;
 	};
 
-
-	class VEX_API KeyPressedEvent : public KeyEvent
+	class  KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(int keycode, int repeatCount): KeyEvent(keycode), m_RepeatCount(repeatCount) {}
@@ -28,11 +27,12 @@ namespace Vex {
 			ss << "KeyPressedEvent: " << m_KeyCode << " (" << m_RepeatCount << " repeats)";
 			return ss.str();
 		}
+		EVENT_CLASS_TYPE(KeyPressed)
 	private:
 		int m_RepeatCount;
 	};
 
-	class VEX_API KeyReleasedEvent : public KeyEvent
+	class  KeyReleasedEvent : public KeyEvent
 	{
 	public:
 		KeyReleasedEvent(const int keycode): KeyEvent(keycode) {}
