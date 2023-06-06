@@ -12,8 +12,15 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "Vex/vendor/GLFW/include"
+IncludeDir["GLAD"] = "Vex/vendor/GLAD/include"
+IncludeDir["ImGui"] = "Vex/vendor/imgui"
+
 
 include "Vex/vendor/GLFW"
+include "Vex/vendor/GLAD"
+include "Vex/vendor/imgui"
+
+
 
 project "Vex"
 	location "Vex"
@@ -36,12 +43,16 @@ project "Vex"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.GLAD}",
+		"%{IncludeDir.ImGui}"
 	}
 
 	links
 	{
 		"GLFW",
+		"GLAD",
+		"ImGui",
 		"opengl32.lib"
 	}
 
@@ -53,7 +64,8 @@ project "Vex"
 		defines 
 		{
 			"VX_PLATFORM_WINDOWS",
-			"VX_BUILD_DLL"
+			"VX_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands
@@ -63,16 +75,20 @@ project "Vex"
 
 	filter "configurations:Debug"
 		defines "VX_DEBUG"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "VX_Release"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "VX_DIST"
+		runtime "Release"
 		optimize "On"
 
+startproject "Sandbox"
 
 project "Sandbox"
 	location "Sandbox"
@@ -101,7 +117,6 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines 
@@ -111,12 +126,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "VX_DEBUG"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "VX_Release"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "VX_DIST"
+		runtime "Release"
 		optimize "On"

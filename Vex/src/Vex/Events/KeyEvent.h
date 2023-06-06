@@ -47,6 +47,7 @@ namespace Vex {
 
 	class KeyTypedEvent : public KeyEvent
 	{
+	public:
 		KeyTypedEvent(const int keycode) : KeyEvent(keycode) {}
 		std::string ToString() const override {
 			std::stringstream ss;
