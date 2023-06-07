@@ -1,6 +1,11 @@
 
 #include <Vex.h>
 
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 
 class ExampleLayer : public Vex::Layer {
 public:
@@ -10,6 +15,9 @@ public:
 	
 	void OnUpdate() override {
 		VX_CORE_INFO("ExampleLayer::Update");
+
+		if (Vex::Input::IsKeyPressed(VX_KEY_TAB))
+			VX_CLIENT_INFO("Tab key is pressed");
 	}
 
 	void OnEvent(Vex::Event& event) override {

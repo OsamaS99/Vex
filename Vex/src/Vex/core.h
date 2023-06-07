@@ -10,9 +10,13 @@
 	#error Vex only support Windows!
 #endif
 
+#ifdef VX_DEBUG
+	#define VX_ENABLE_ASSERTS
+#endif
+
 #ifdef VX_ENABLE_ASSERTS
 	#define VX_ASSERT(x, ...) { if(!(x)) {VX_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
-	#define VX_CORE_ASSERT(x, ...) { if(!(x)) { VX_CORE_ERROR("Assertion Failed: {0}", __VA__ARGS__); __debugbreak();}}
+	#define VX_CORE_ASSERT(x, ...) { if(!(x)) { VX_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
 #else
 	#define VX_ASSERT(x, ...)
 	#define VX_CORE_ASSERT(x, ...)

@@ -1,5 +1,6 @@
 workspace "Vex"
 	architecture "x64"
+	startproject "Sandbox"
 
 	configurations
 	{
@@ -10,22 +11,23 @@ workspace "Vex"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "Vex/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Vex/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Vex/vendor/imgui"
+IncludeDir["GLM"] = "Vex/vendor/GLM"
 
 
 include "Vex/vendor/GLFW"
 include "Vex/vendor/GLAD"
 include "Vex/vendor/imgui"
 
-
-
 project "Vex"
 	location "Vex"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -33,23 +35,26 @@ project "Vex"
 	pchheader "vxpch.h"
 	pchsource "Vex/src/vxpch.cpp"
 
-	files 
+	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/GLM/glm/**.hpp",
+		"%{prj.name}/vendor/GLM/glm/**.inl"
 	}
 
-	includedirs 
+	includedirs
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.GLM}"
 	}
 
-	links
-	{
+	links 
+	{ 
 		"GLFW",
 		"GLAD",
 		"ImGui",
@@ -58,10 +63,9 @@ project "Vex"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
-		defines 
+		defines
 		{
 			"VX_PLATFORM_WINDOWS",
 			"VX_BUILD_DLL",
@@ -70,7 +74,7 @@ project "Vex"
 
 		postbuildcommands
 		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir ..  "/Sandbox")
+			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
 		}
 
 	filter "configurations:Debug"
@@ -79,7 +83,7 @@ project "Vex"
 		symbols "On"
 
 	filter "configurations:Release"
-		defines "VX_Release"
+		defines "VX_RELEASE"
 		runtime "Release"
 		optimize "On"
 
@@ -88,17 +92,16 @@ project "Vex"
 		runtime "Release"
 		optimize "On"
 
-startproject "Sandbox"
-
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	files 
+	files
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
@@ -107,7 +110,8 @@ project "Sandbox"
 	includedirs
 	{
 		"Vex/vendor/spdlog/include",
-		"Vex/src"
+		"Vex/src",
+		"%{IncludeDir.GLM}"
 	}
 
 	links
@@ -119,7 +123,7 @@ project "Sandbox"
 		cppdialect "C++17"
 		systemversion "latest"
 
-		defines 
+		defines
 		{
 			"VX_PLATFORM_WINDOWS"
 		}
@@ -130,7 +134,7 @@ project "Sandbox"
 		symbols "On"
 
 	filter "configurations:Release"
-		defines "VX_Release"
+		defines "VX_RELEASE"
 		runtime "Release"
 		optimize "On"
 

@@ -7,3 +7,6 @@
 [submodule "Vex/vendor/imgui"]
 	path = Vex/vendor/imgui
 	url = https://github.com/TheCherno/imgui
+[submodule "Vex/vendor/GLM"]
+	path = Vex/vendor/GLM
+	url = https://github.com/g-truc/glm

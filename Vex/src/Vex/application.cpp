@@ -5,6 +5,8 @@
 
 #include <glad/glad.h>
 
+#include "Input.h"
+
 
 namespace Vex {
 
@@ -57,6 +59,9 @@ namespace Vex {
 		while (m_Running) {
 			glClearColor(1, 0, 0, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			auto [x, y] = Input::GetMousePosition();
+			VX_CORE_TRACE("{0}, {1}", x, y);
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
