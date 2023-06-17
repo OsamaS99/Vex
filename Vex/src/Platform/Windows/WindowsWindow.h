@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vex/Window.h"
+#include "Vex/Renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -29,6 +30,7 @@ namespace Vex {
 		virtual void Shutdown();
 
 		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 
 		struct WindowData {
 			std::string Title;

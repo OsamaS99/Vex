@@ -1,45 +1,54 @@
-
 #include <Vex.h>
 
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "imgui/imgui.h"
 
-
-class ExampleLayer : public Vex::Layer {
+class ExampleLayer : public Vex::Layer
+{
 public:
-	ExampleLayer() : Layer("Example") {
-
+	ExampleLayer()
+		: Layer("Example")
+	{
 	}
-	
-	void OnUpdate() override {
-		VX_CORE_INFO("ExampleLayer::Update");
 
+	void OnUpdate() override
+	{
 		if (Vex::Input::IsKeyPressed(VX_KEY_TAB))
-			VX_CLIENT_INFO("Tab key is pressed");
+			VX_CLIENT_TRACE("Tab key is pressed (poll)!");
 	}
 
-	void OnEvent(Vex::Event& event) override {
-		VX_CORE_TRACE("{0}", event);
+	virtual void OnImGuiRender() override
+	{
 	}
+
+	void OnEvent(Vex::Event& event) override
+	{
+		if (event.GetEventType() == Vex::EventType::KeyPressed)
+		{
+			Vex::KeyPressedEvent& e = (Vex::KeyPressedEvent&)event;
+			if (e.GetKeyCode() == VX_KEY_TAB)
+				VX_CLIENT_TRACE("Tab key is pressed (event)!");
+			VX_CLIENT_TRACE("{0}", (char)e.GetKeyCode());
+		}
+	}
+
 };
-
 
 class Sandbox : public Vex::Application
 {
 public:
-	Sandbox() {
+	Sandbox()
+	{
 		PushLayer(new ExampleLayer());
-		PushLayer(new Vex::ImGuiLayer());
 	}
 
-	~Sandbox() {
+	~Sandbox()
+	{
 
 	}
 
 };
 
-Vex::Application* Vex::CreateApplication() {
+Vex::Application* Vex::CreateApplication()
+{
 	return new Sandbox();
 }

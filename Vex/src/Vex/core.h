@@ -1,10 +1,15 @@
 #pragma once
 
 #ifdef VX_PLATFORM_WINDOWS
-	#ifdef VX_BUILD_DLL
-		#define VEX_API _declspec(dllexport)
+	#if VX_DYNAMIC_LINK
+		#ifdef VX_BUILD_DLL
+			#define VEX_API _declspec(dllexport)
+		#else
+			#define VEX_API _declspec(dllimport)
+		#endif
 	#else
-		#define VEX_API _declspec(dllimport)
+		#define VEX_API
+	
 	#endif
 #else
 	#error Vex only support Windows!
