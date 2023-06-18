@@ -38,6 +38,8 @@ namespace Vex {
 			bool VSync;
 
 			EventCallbackFn EventCallback;
-		} m_Data;
+		};
+
+		WindowData m_Data;
 	};
 }
