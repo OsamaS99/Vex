@@ -9,6 +9,8 @@
 
 #include "Vex/ImGui/ImGuiLayer.h"
 
+#include "Vex/Renderer/Shader.h"
+
 namespace Vex {
 
 	class VEX_API Application
@@ -36,6 +38,7 @@ namespace Vex {
 		LayerStack m_LayerStack;
 
 		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		std::unique_ptr<Shader> m_Shader;
 	private: 
 		static Application* s_Instance;
 	};
