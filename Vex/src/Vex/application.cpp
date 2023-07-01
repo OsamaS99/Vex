@@ -13,6 +13,26 @@ namespace Vex {
 
 	Application* Application::s_Instance = nullptr;
 
+	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) {
+		switch (type)
+		{
+		case Vex::ShaderDataType::Float: return GL_FLOAT;
+		case Vex::ShaderDataType::Float2:return GL_FLOAT;
+		case Vex::ShaderDataType::Float3: return GL_FLOAT;
+		case Vex::ShaderDataType::Float4: return GL_FLOAT;
+		case Vex::ShaderDataType::Mat3: return GL_FLOAT;
+		case Vex::ShaderDataType::Mat4: return GL_FLOAT;
+		case Vex::ShaderDataType::Int:return GL_INT;
+		case Vex::ShaderDataType::Int2: return GL_INT;
+		case Vex::ShaderDataType::Int3: return GL_INT;
+		case Vex::ShaderDataType::Int4: return GL_INT;
+		case Vex::ShaderDataType::Bool: return GL_BOOL;
+		}
+		VX_CORE_ASSERT(false, "Unknown ShaderDataType!");
+		return 0;
+
+	}
+
 	Application::Application()
 	{
 		VX_CORE_ASSERT(!s_Instance, "Application already exists!");
@@ -28,17 +48,38 @@ namespace Vex {
 		//glBindVertexArray(m_VertexArray);
 
 
-		float vertices[9] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.0f,  0.5f, 0.0f,
+		float vertices[3 * 7] = {
+			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+			 0.0f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 		};
 
 		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 		//m_VertexBuffer->Bind();
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		BufferLayout layout = {
+			{ShaderDataType::Float3, "a_Positition"},
+			{ShaderDataType::Float4, "a_Color"},
+		};
+
+		m_VertexBuffer->SetLayout(layout);
+
+
+		uint32_t index = 0;
+		for (const auto& element : m_VertexBuffer->GetLayout()) {
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(
+				index, 
+				element.GetComponentCount(), 
+				GL_FLOAT, 
+				element.Normalized ? GL_TRUE : GL_FALSE , 
+				layout.GetStride(), 
+				(const void *)element.Offset);
+			index++;
+		}
+
+		//m_VertexBuffer->SetLayout(layout);
+
 
 
 		unsigned int indices[3] = { 0, 1, 2 };
@@ -49,12 +90,16 @@ namespace Vex {
 			#version 330 core
 
 			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec4 a_Color;
+
 
 			out vec3 v_Position;
+			out vec4 v_Color;
 
 			void main()
 			{
 				v_Position = a_Position;
+				v_Color = a_Color;
 				gl_Position = vec4(a_Position, 1.0);
 			}
 		)";
@@ -62,13 +107,16 @@ namespace Vex {
 		std::string	fragmentSrc = R"(
 			#version 330 core
 
-			layout(location = 0) out vec4 o_Color;
+			layout(location = 0) out vec4 color;
 
 			in vec3 v_Position;
+			in vec4 v_Color;
+
 
 			void main()
 			{
-				o_Color = vec4(0.5 * v_Position + 0.5, 1.0);
+				color = vec4(v_Position * 0.5 + 0.5, 1.0);
+				color = v_Color;
 			}
 			)";
 
