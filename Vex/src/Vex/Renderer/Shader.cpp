@@ -7,7 +7,7 @@ namespace Vex
 {
 	Shader::Shader(const std::string& vertexSrc, const std::string& fragmentSrc) : m_RendererID{0}
 	{
-			// Create an empty vertex shader handle
+		// Create an empty vertex shader handle
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
 		// Send the vertex shader source code to GL

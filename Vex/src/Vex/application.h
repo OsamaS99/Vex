@@ -9,8 +9,10 @@
 
 #include "Vex/ImGui/ImGuiLayer.h"
 
+
 #include "Vex/Renderer/Shader.h"
 #include "Vex/Renderer/Buffer.h"
+#include "Vex/Renderer/VertexArray.h"
 
 namespace Vex {
 
@@ -39,9 +41,10 @@ namespace Vex {
 		LayerStack m_LayerStack;
 
 		//unsigned int m_VertexArray, m_IndexBuffer;
-		std::unique_ptr<Shader> m_Shader;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_VertexArray;
+		std::shared_ptr<VertexBuffer> m_VertexBuffer;
+		std::shared_ptr<IndexBuffer> m_IndexBuffer;
 
 	private: 
 		static Application* s_Instance;
