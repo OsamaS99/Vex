@@ -7,7 +7,4 @@ namespace Vex {
 
 	}
 
-	Layer::~Layer() {
-
-	}
 }
