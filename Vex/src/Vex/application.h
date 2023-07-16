@@ -13,6 +13,7 @@
 #include "Vex/Renderer/Shader.h"
 #include "Vex/Renderer/Buffer.h"
 #include "Vex/Renderer/VertexArray.h"
+#include "Vex/Renderer/OrthographicCamera.h"
 
 namespace Vex {
 
@@ -45,6 +46,8 @@ namespace Vex {
 
 		std::shared_ptr<Shader> m_BlueShader;
 		std::shared_ptr<VertexArray> m_SquareVA;
+
+		OrthographicCamera m_Camera;
 
 	private: 
 		static Application* s_Instance;
