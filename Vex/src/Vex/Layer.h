@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vex/Core.h"
+#include "Vex/Core/Timestep.h"
 #include "Vex/Events/Event.h"
 
 namespace Vex {
@@ -12,7 +13,7 @@ namespace Vex {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Vex::Timestep ts) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 
