@@ -2,18 +2,20 @@
 
 #include "imgui/imgui.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 class ExampleLayer : public Vex::Layer
 {
 public:
-	ExampleLayer() 
-		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f), m_CameraRotation(0.0f)
+	ExampleLayer()
+		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
 	{
 		m_VertexArray.reset(Vex::VertexArray::Create());
 
 		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-			 0.0f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
 
 		std::shared_ptr<Vex::VertexBuffer> vertexBuffer;
@@ -30,15 +32,13 @@ public:
 		indexBuffer.reset(Vex::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
-
 		m_SquareVA.reset(Vex::VertexArray::Create());
 
-
 		float squareVertices[3 * 4] = {
-			-0.75f, -0.75f, 0.0f,
-			 0.75f, -0.75f, 0.0f,
-			 0.75f,  0.75f, 0.0f,
-			-0.75f,  0.75f, 0.0f
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,  0.5f, 0.0f,
+			-0.5f,  0.5f, 0.0f
 		};
 
 		std::shared_ptr<Vex::VertexBuffer> squareVB;
@@ -53,14 +53,14 @@ public:
 		squareIB.reset(Vex::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
-
 		std::string vertexSrc = R"(
 			#version 330 core
-
+			
 			layout(location = 0) in vec3 a_Position;
 			layout(location = 1) in vec4 a_Color;
-			
+
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -69,26 +69,24 @@ public:
 			{
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
 			}
 		)";
 
-		std::string	fragmentSrc = R"(
+		std::string fragmentSrc = R"(
 			#version 330 core
-
+			
 			layout(location = 0) out vec4 color;
 
 			in vec3 v_Position;
 			in vec4 v_Color;
-
 
 			void main()
 			{
 				color = vec4(v_Position * 0.5 + 0.5, 1.0);
 				color = v_Color;
 			}
-			)";
-
+		)";
 
 		m_Shader.reset(new Vex::Shader(vertexSrc, fragmentSrc));
 
@@ -98,63 +96,51 @@ public:
 			layout(location = 0) in vec3 a_Position;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
+
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);	
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
 			}
 		)";
 
-		std::string blueShaderFragmentSrc = R"(
+		std::string flatShaderFragmentSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
+
 			in vec3 v_Position;
+
+			uniform vec4 u_Color;
+
 			void main()
 			{
-				color = vec4(0.2, 0.3, 0.8, 1.0);
+				color = u_Color;
 			}
 		)";
 
-		m_BlueShader.reset(new Vex::Shader(blueShaderVertexSrc, blueShaderFragmentSrc));
+		m_BlueShader.reset(new Vex::Shader(blueShaderVertexSrc, flatShaderFragmentSrc));
 	}
 
 	void OnUpdate(Vex::Timestep ts) override
 	{
-
 		if (Vex::Input::IsKeyPressed(VX_KEY_LEFT))
-		{
-			m_CameraPosition.x += m_CameraSpeed * ts;
-		}
-
+			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
 		else if (Vex::Input::IsKeyPressed(VX_KEY_RIGHT))
-		{
-			m_CameraPosition.x -= m_CameraSpeed * ts;
-		}
+			m_CameraPosition.x += m_CameraMoveSpeed * ts;
 
 		if (Vex::Input::IsKeyPressed(VX_KEY_UP))
-		{
-			m_CameraPosition.y -= m_CameraSpeed * ts;
-		}
-
+			m_CameraPosition.y += m_CameraMoveSpeed * ts;
 		else if (Vex::Input::IsKeyPressed(VX_KEY_DOWN))
-		{
-			m_CameraPosition.y += m_CameraSpeed * ts;
-		}
+			m_CameraPosition.y -= m_CameraMoveSpeed * ts;
 
 		if (Vex::Input::IsKeyPressed(VX_KEY_A))
-		{
-			m_CameraRotation -= m_CameraRotationSpeed * ts;
-		}
-
-		else if (Vex::Input::IsKeyPressed(VX_KEY_D))
-		{
 			m_CameraRotation += m_CameraRotationSpeed * ts;
-		}
-
-		
+		if (Vex::Input::IsKeyPressed(VX_KEY_D))
+			m_CameraRotation -= m_CameraRotationSpeed * ts;
 
 		Vex::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Vex::RenderCommand::Clear();
@@ -164,22 +150,40 @@ public:
 
 		Vex::Renderer::BeginScene(m_Camera);
 
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-		Vex::Renderer::Submit(m_BlueShader, m_SquareVA);
+
+		glm::vec4 blueColor(0.2, 0.3, 0.8, 1.0f);
+		glm::vec4 redColor(0.8, 0.2, 0.3, 1.0f);
+
+		for (int y = 0; y < 20; y++)
+		{
+			for (int x = 0; x < 20; x++)
+			{
+				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				if (x % 2 == 0)
+					m_BlueShader->UploadUniformFloat4("u_Color", blueColor);
+				else
+					m_BlueShader->UploadUniformFloat4("u_Color", redColor);
+
+				Vex::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
+			}
+		}
+
 		Vex::Renderer::Submit(m_Shader, m_VertexArray);
-
 
 		Vex::Renderer::EndScene();
 	}
 
 	virtual void OnImGuiRender() override
 	{
+
 	}
 
 	void OnEvent(Vex::Event& event) override
 	{
 	}
-
 private:
 	std::shared_ptr<Vex::Shader> m_Shader;
 	std::shared_ptr<Vex::VertexArray> m_VertexArray;
@@ -189,17 +193,16 @@ private:
 
 	Vex::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
-	float m_CameraRotation;
-	float m_CameraSpeed = 0.1f;
-	float m_CameraRotationSpeed = 1.0f;
+	float m_CameraMoveSpeed = 5.0f;
 
-
+	float m_CameraRotation = 0.0f;
+	float m_CameraRotationSpeed = 180.0f;
 };
 
 class Sandbox : public Vex::Application
 {
 public:
-	Sandbox() 
+	Sandbox()
 	{
 		PushLayer(new ExampleLayer());
 	}
