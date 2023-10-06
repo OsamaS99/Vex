@@ -17,6 +17,7 @@
 
 #include "Vex/Renderer/Buffer.h"
 #include "Vex/Renderer/Shader.h"
+#include "Vex/Renderer/Texture.h"
 #include "Vex/Renderer/VertexArray.h"
 
 #include "Vex/Renderer/OrthographicCamera.h"

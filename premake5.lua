@@ -17,6 +17,8 @@ IncludeDir["GLFW"] = "Vex/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Vex/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Vex/vendor/imgui"
 IncludeDir["GLM"] = "Vex/vendor/GLM"
+IncludeDir["stb_image"] = "Vex/vendor/stb_image"
+
 
 
 include "Vex/vendor/GLFW"
@@ -40,6 +42,8 @@ project "Vex"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/GLM/glm/**.hpp",
 		"%{prj.name}/vendor/GLM/glm/**.inl"
 	}
@@ -51,7 +55,8 @@ project "Vex"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.GLM}"
+		"%{IncludeDir.GLM}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links 
