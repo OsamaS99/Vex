@@ -9,6 +9,8 @@
 #include "Vex/Input.h"
 #include "Vex/KeyCodes.h"
 #include "Vex/MouseButtonCodes.h"
+#include "Vex/OrthographicCameraController.h"
+
 
 #include "Vex/ImGui/ImGuiLayer.h"
 
