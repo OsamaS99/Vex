@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vex/Core.h"
+#include "Vex/Core/Core.h"
 #include "Vex/Core/Timestep.h"
 #include "Vex/Events/Event.h"
 

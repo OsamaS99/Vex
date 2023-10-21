@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vex/Core.h"
+#include "Vex/Core/Core.h"
 #include "Layer.h"
 
 namespace Vex {

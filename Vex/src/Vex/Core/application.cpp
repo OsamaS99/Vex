@@ -1,7 +1,7 @@
 #include "vxpch.h"
 #include "Application.h"
 
-#include "Vex/Log.h"
+#include "Vex/Core/Log.h"
 
 #include "Vex/Renderer/Renderer.h"
 

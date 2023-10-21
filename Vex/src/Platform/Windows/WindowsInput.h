@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vex/Input.h"
+#include "Vex/Core/Input.h"
 
 namespace Vex {
 

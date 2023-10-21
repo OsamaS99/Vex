@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vex/Layer.h"
+#include "Vex/Core/Layer.h"
 
 #include "Vex/Events/ApplicationEvent.h"
 #include "Vex/Events/KeyEvent.h"

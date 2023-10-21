@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Vex/Application.h"
-#include "Vex/Layer.h"
-#include "Vex/Log.h"
+#include "Vex/Core/Application.h"
+#include "Vex/Core/Layer.h"
+#include "Vex/Core/Log.h"
 
 #include "Vex/Core/Timestep.h"
 
-#include "Vex/Input.h"
-#include "Vex/KeyCodes.h"
-#include "Vex/MouseButtonCodes.h"
-#include "Vex/OrthographicCameraController.h"
+#include "Vex/Core/Input.h"
+#include "Vex/Core/KeyCodes.h"
+#include "Vex/Core/MouseButtonCodes.h"
+#include "Vex/Renderer/OrthographicCameraController.h"
 
 
 #include "Vex/ImGui/ImGuiLayer.h"
@@ -24,4 +24,4 @@
 
 #include "Vex/Renderer/OrthographicCamera.h"
 
-#include "Vex/EntryPoint.h"
+#include "Vex/Core/EntryPoint.h"

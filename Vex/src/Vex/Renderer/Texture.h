@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Vex/core.h"
+#include "Vex/Core/core.h"
 
 
 namespace Vex {

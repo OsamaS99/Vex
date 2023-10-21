@@ -1,7 +1,7 @@
 #include "vxpch.h"
 #include "WindowsInput.h"
 
-#include "Vex/Application.h"
+#include "Vex/Core/Application.h"
 #include <GLFW/glfw3.h>
 
 namespace Vex {

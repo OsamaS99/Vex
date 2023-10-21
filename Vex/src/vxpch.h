@@ -14,7 +14,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Vex/Log.h"
+#include "Vex/Core/Log.h"
 
 
 #ifdef VX_PLATFORM_WINDOWS

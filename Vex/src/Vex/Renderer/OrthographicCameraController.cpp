@@ -1,10 +1,8 @@
 #include "vxpch.h"
 #include "OrthographicCameraController.h"
 
-#include "core.h"
-
-#include "Vex/Input.h"
-#include "Vex/KeyCodes.h"
+#include "Vex/Core/Input.h"
+#include "Vex/Core/KeyCodes.h"
 
 namespace Vex {
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)

@@ -3,7 +3,7 @@
 #include "Core.h"
 
 #include "Window.h"
-#include "Vex/LayerStack.h"
+#include "Vex/Core/LayerStack.h"
 #include "Vex/Events/Event.h"
 #include "Vex/Events/ApplicationEvent.h"
 

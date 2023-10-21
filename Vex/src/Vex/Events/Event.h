@@ -1,7 +1,7 @@
 #pragma once
 
 #include "vxpch.h"
-#include "Vex/Core.h"
+#include "Vex/Core/Core.h"
 
 
 namespace Vex {

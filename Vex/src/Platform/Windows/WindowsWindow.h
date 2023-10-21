@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vex/Window.h"
+#include "Vex/Core/Window.h"
 #include "Vex/Renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>
