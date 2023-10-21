@@ -8,22 +8,28 @@ workspace "Vex"
 		"Release",
 		"Dist"
 	}
+	
+	flags
+	{
+		"MultiProcessorCompile"
+	}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "Vex/vendor/GLFW/include"
-IncludeDir["GLAD"] = "Vex/vendor/GLAD/include"
+IncludeDir["Glad"] = "Vex/vendor/Glad/include"
 IncludeDir["ImGui"] = "Vex/vendor/imgui"
-IncludeDir["GLM"] = "Vex/vendor/GLM"
+IncludeDir["glm"] = "Vex/vendor/glm"
 IncludeDir["stb_image"] = "Vex/vendor/stb_image"
 
+group "Dependencies"
+	include "Vex/vendor/GLFW"
+	include "Vex/vendor/Glad"
+	include "Vex/vendor/imgui"
 
-
-include "Vex/vendor/GLFW"
-include "Vex/vendor/GLAD"
-include "Vex/vendor/imgui"
+group ""
 
 project "Vex"
 	location "Vex"
@@ -44,8 +50,13 @@ project "Vex"
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/stb_image/**.h",
 		"%{prj.name}/vendor/stb_image/**.cpp",
-		"%{prj.name}/vendor/GLM/glm/**.hpp",
-		"%{prj.name}/vendor/GLM/glm/**.inl"
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl",
+	}
+
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	includedirs
@@ -53,22 +64,21 @@ project "Vex"
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.GLAD}",
+		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.GLM}",
+		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}"
 	}
 
 	links 
 	{ 
 		"GLFW",
-		"GLAD",
+		"Glad",
 		"ImGui",
 		"opengl32.lib"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
@@ -77,7 +87,6 @@ project "Vex"
 			"VX_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
 		}
-
 
 	filter "configurations:Debug"
 		defines "VX_DEBUG"
@@ -115,7 +124,7 @@ project "Sandbox"
 		"Vex/vendor/spdlog/include",
 		"Vex/src",
 		"Vex/vendor",
-		"%{IncludeDir.GLM}"
+		"%{IncludeDir.glm}"
 	}
 
 	links
